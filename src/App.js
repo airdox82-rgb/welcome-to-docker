@@ -5,6 +5,16 @@ const shareMessage = "I just ran my first container using Docker";
 const shareLink = "https://docker.com/";
 
 const App = () => {
+  const twitterUrl = new URL("https://twitter.com/intent/tweet");
+  twitterUrl.searchParams.set("text", shareMessage);
+  twitterUrl.searchParams.set("url", shareLink);
+
+  const linkedinUrl = new URL("https://www.linkedin.com/sharing/share-offsite/");
+  linkedinUrl.searchParams.set("url", shareLink);
+
+  const redditUrl = new URL("https://reddit.com/submit");
+  redditUrl.searchParams.set("title", shareMessage);
+  redditUrl.searchParams.set("url", shareLink);
   return (
     <div className="App">
       <Confetti />
@@ -16,36 +26,24 @@ const App = () => {
         <div>
           <a
             target="_blank"
-            href={
-              "https://twitter.com/intent/tweet?text=" +
-              shareMessage +
-              "&url=" +
-              shareLink
-            }
-            class="fa-brands fa-x-twitter"
+            href={twitterUrl.toString()}
+            className="fa-brands fa-x-twitter"
             rel="noopener noreferrer"
           >
             {" "}
           </a>
           <a
             target="_blank"
-            href={
-              "https://www.linkedin.com/sharing/share-offsite/?url=" + shareLink
-            }
-            class="fa-brands fa-linkedin"
+            href={linkedinUrl.toString()}
+            className="fa-brands fa-linkedin"
             rel="noopener noreferrer"
           >
             {" "}
           </a>
           <a
             target="_blank"
-            href={
-              "https://reddit.com/submit?title=" +
-              shareMessage +
-              "&url=" +
-              shareLink
-            }
-            class="fa-brands fa-reddit"
+            href={redditUrl.toString()}
+            className="fa-brands fa-reddit"
             rel="noopener noreferrer"
           >
             {" "}

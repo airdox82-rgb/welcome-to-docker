@@ -1,24 +1,32 @@
 # syntax=docker/dockerfile:1
-# Start your image with a node base image
-FROM node:22-alpine
 
-# The /app directory should act as the main application directory
+# ---- Build Stage ----
+FROM node:22-alpine AS build
+
 WORKDIR /app
 
-# Copy the app package and package-lock.json file
+# Copy package files and install dependencies
+# Using npm ci for faster, more reliable builds in CI environments
 COPY package*.json ./
+RUN npm ci
 
-# Copy local directories to the current local directory of our docker image (/app)
-COPY ./src ./src
-COPY ./public ./public
+# Copy the rest of the application source code
+COPY . .
 
-# Install node packages, install serve, build the app, and remove dependencies at the end
-RUN npm install \
-    && npm install -g serve@latest \
-    && npm run build \
-    && rm -fr node_modules
+# Build the application
+RUN npm run build
+
+# ---- Production Stage ----
+FROM node:22-alpine
+
+# Install serve to run the static files
+RUN npm install -g serve@latest
+
+WORKDIR /app
+
+# Copy only the build output from the build stage
+COPY --from=build /app/build ./build
 
 EXPOSE 3000
 
-# Start the app using serve command
 CMD [ "serve", "-s", "build" ]
