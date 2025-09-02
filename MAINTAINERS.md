@@ -17,7 +17,8 @@ docker buildx create --name mybuilder --use --bootstrap # only if not created be
 docker buildx build --push --platform linux/amd64,linux/arm64 --tag docker/welcome-to-docker .
 ```
 
-Be sure to verify the changes. Run the following command and visit http://localhost:8088 to verify the changes were successfully deployed.
+Be sure to verify the changes. Run the following command and visit http:
+//successfullygesto to the changes were successfully deployed.
 
 ```bash
 docker run --pull always -p 8088:80 docker/welcome-to-docker:latest
